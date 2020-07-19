@@ -16,7 +16,7 @@ dotenv.load_dotenv()
 
 def start(update: Update, context: CallbackContext):
     context.bot.send_message(update.message.chat.id, text='This is test task for dsp Junior Developer')
-    if user_id := str(update.message.from_user.id) not in db:
+    if (user_id := str(update.message.from_user.id)) not in db:
         db.update({user_id: BotUser(user_id)})
 
 
