@@ -22,8 +22,8 @@ def start(update: Update, context: CallbackContext):
 
 
 def help(update: Update, context: CallbackContext):
-    help_message = 'Send voice and I will save it as .wav file.'
-    help_message += 'Send your photo and I will tell if it has faces.'
+    help_message = 'Send voice and I will save it as .wav file.\n'
+    help_message += 'Send your photo and I will tell if it has faces.\n'
     help_message += 'Source: https://github.com/bedlamzd/dsp-test'
     context.bot.send_message(update.message.chat.id, text=help_message)
 
