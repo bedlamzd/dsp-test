@@ -46,12 +46,9 @@ if __name__ == '__main__':
     dispatcher.add_handler(voice_handler)
 
     db = shelve.open('bot_db')
-    try:
-        updater.start_webhook(
-            listen='0.0.0.0',
-            port=PORT,
-            url_path=TOKEN
-        )
-        updater.bot.set_webhook(URL + TOKEN)
-    finally:
-        db.close()
+    updater.start_webhook(
+        listen='0.0.0.0',
+        port=PORT,
+        url_path=TOKEN
+    )
+    updater.bot.set_webhook(URL + TOKEN)
