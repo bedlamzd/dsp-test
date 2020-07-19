@@ -32,7 +32,8 @@ def process_voice(update: Update, context: CallbackContext):
         user.add_voice(voice)
         db.update({user.id: user})
         context.bot.send_message(update.message.chat.id, reply_to_message_id=update.message.message_id,
-                                 text='Audio saved.')
+                                 text='Converting...')
+        context.bot.send_document(update.message.chat.id, user.get_audio(user.record_id - 1))
     else:
         context.bot.send_message(update.message.chat.id, 'Unknown user. Send /start first.')
 
