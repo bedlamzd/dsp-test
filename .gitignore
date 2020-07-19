@@ -1,0 +1,6 @@
+*.wav
+*.bak
+*.dat
+*.dir
+/venv
+/.idea
