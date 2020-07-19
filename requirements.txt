@@ -1,3 +1,4 @@
 pyTelegramBotAPI
 pydub
 requests
+python-dotenv

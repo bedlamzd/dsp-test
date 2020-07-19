@@ -1,12 +1,15 @@
-import telebot
 import requests
-import json
 import shelve
+import os
+
+import telebot
+import dotenv
 
 from BotUser import BotUser
 
-bot_data = json.load(open('bot.json'))
-TOKEN = bot_data['TOKEN']
+dotenv.load_dotenv()
+
+TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
 
