@@ -49,6 +49,8 @@ def process_img(update: Update, context: CallbackContext):
             if contains_face(img):
                 context.bot.send_message(update.message.chat.id, text=f'Img contains face!')
                 user.add_image(img)
+            else:
+                context.bot.send_message(update.message.chat.id, text=f'Img does not contain face...')
         db.update({user.id: user})
     else:
         context.bot.send_message(update.message.chat.id, 'Unknown user. Send /start first.')

@@ -18,11 +18,13 @@ def contains_face(img):
     img_gray = cv2.equalizeHist(img_gray)
 
     faces = face_cascade.detectMultiScale(img_gray)
-    return any(faces)
+    return len(faces) > 0
 
-def read_img_from_bytearray(bytearray):
-    nparr = np.frombuffer(bytearray, np.uint8)
+
+def read_img_from_bytearray(bytestr):
+    nparr = np.frombuffer(bytestr, np.uint8)
     return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
 
 def save_img(path, img):
     path = pathlib.Path(path)
