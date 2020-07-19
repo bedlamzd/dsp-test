@@ -8,6 +8,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext, Filters, MessageHandler
 
 from BotUser import BotUser
+from image_magick import read_img_from_bytearray, contains_face
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -38,6 +39,20 @@ def process_voice(update: Update, context: CallbackContext):
         context.bot.send_message(update.message.chat.id, 'Unknown user. Send /start first.')
 
 
+def process_img(update: Update, context: CallbackContext):
+    if user := db.get(str(update.message.from_user.id)):
+        imgs = update.message.photo
+        for img in imgs:
+            context.bot.send_message(update.message.chat.id, text=f'Processing {img.file_id} img...')
+            img = read_img_from_bytearray(img.get_file().download_as_bytearray())
+            if contains_face(img):
+                context.bot.send_message(update.message.chat.id, text=f'Img contains face!')
+                user.add_image(img)
+        db.update({user.id: user})
+    else:
+        context.bot.send_message(update.message.chat.id, 'Unknown user. Send /start first.')
+
+
 if __name__ == '__main__':
     TOKEN = os.getenv('TOKEN')
     URL = os.environ.get('URL')
@@ -49,10 +64,12 @@ if __name__ == '__main__':
     start_handler = CommandHandler('start', start)
     help_handler = CommandHandler('help', help)
     voice_handler = MessageHandler(Filters.voice, process_voice)
+    photo_handler = MessageHandler(Filters.photo, process_img)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(help_handler)
     dispatcher.add_handler(voice_handler)
+    dispatcher.add_handler(photo_handler)
 
     db = shelve.open('bot_db')
     updater.start_webhook(

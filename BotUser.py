@@ -1,25 +1,38 @@
 from audio_magick import save_voice_to_wav
+from image_magick import save_img
 
 
 class BotUser:
     def __init__(self, id):
         self.id = str(id)
         self.records = []
+        self.imgs = []
         self.record_id = 0
+        self.img_id = 0
 
-    def _audio_name(self, id):
-        return f'audio_message_{id}.wav'
+    @staticmethod
+    def _audio_name(audio_id):
+        return f'audio_message_{audio_id}.wav'
 
-    def _audio_path(self, id):
-        return fr'.\{self.id}\{self._audio_name(id)}'
+    def _audio_path(self, audio_id):
+        return fr'.\{self.id}\{self._audio_name(audio_id)}'
 
-    def get_audio(self, id):
-        return open(self._audio_path(id), 'rb')
+    @staticmethod
+    def _img_name(img_id):
+        return f'face_img_{img_id}.png'
+
+    def _image_path(self, img_id):
+        return fr'.\{self.id}\{self._img_name(img_id)}'
+
+    def get_audio(self, audio_id):
+        return open(self._audio_path(audio_id), 'rb')
 
     def add_voice(self, voice):
         save_voice_to_wav(self._audio_path(self.record_id), voice)
         self.records.append(self._audio_name(self.record_id))
         self.record_id += 1
 
-    def add_image(self, image):
-        pass
+    def add_image(self, img):
+        save_img(self._image_path(self.img_id), img)
+        self.imgs.append(self._img_name(self.img_id))
+        self.img_id += 1
