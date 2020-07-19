@@ -1,5 +1,6 @@
 import os
 import shelve
+import logging
 
 import dotenv
 
@@ -7,6 +8,8 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext, Filters, MessageHandler
 
 from BotUser import BotUser
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 dotenv.load_dotenv()
 
