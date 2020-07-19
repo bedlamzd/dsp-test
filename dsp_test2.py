@@ -20,6 +20,12 @@ def start(update: Update, context: CallbackContext):
         db.update({user_id: BotUser(user_id)})
 
 
+def help(update: Update, context: CallbackContext):
+    help_message = 'Send voice and I will save it as .wav file.'
+    help_message += 'Send your photo and I will tell if it has faces.'
+    context.bot.send_message(update.message.chat.id, text=help_message)
+
+
 def process_voice(update: Update, context: CallbackContext):
     if user := db.get(str(update.message.from_user.id)):
         voice = update.message.voice.get_file().download_as_bytearray()
@@ -40,9 +46,11 @@ if __name__ == '__main__':
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler('start', start)
+    help_handler = CommandHandler('help', help)
     voice_handler = MessageHandler(Filters.voice, process_voice)
 
     dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(help_handler)
     dispatcher.add_handler(voice_handler)
 
     db = shelve.open('bot_db')
