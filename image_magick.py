@@ -1,5 +1,6 @@
 import pathlib
 import cv2
+import numpy as np
 from cv2.data import haarcascades
 
 face_cascade_name = f'{haarcascades}/haarcascade_frontalface_alt.xml'
@@ -20,7 +21,8 @@ def contains_face(img):
     return any(faces)
 
 def read_img_from_bytearray(bytearray):
-    return cv2.imdecode(bytearray, cv2.IMREAD_COLOR)
+    nparr = np.frombuffer(bytearray, np.uint8)
+    return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
 def save_img(path, img):
     path = pathlib.Path(path)

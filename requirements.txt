@@ -1,4 +1,5 @@
 python-telegram-bot
 pydub
 python-dotenv
+numpy
 opencv-contrib-python-headless
