@@ -18,10 +18,9 @@ class BotUser:
             return f.read()
 
     def add_voice(self, voice):
-        voice_name = f'audio_message_{self.record_id}.wav'
+        save_voice_to_wav(self._audio_path(self.record_id), voice)
+        self.records.append(self._audio_name(self.record_id))
         self.record_id += 1
-        save_voice_to_wav(fr'.\{self.id}\{voice_name}', voice)
-        self.records.append(voice_name)
 
     def add_image(self, image):
         pass
