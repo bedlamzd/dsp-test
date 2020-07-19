@@ -53,7 +53,7 @@ def process_voice(message: telebot.types.Message):
 if __name__ == '__main__':
     db = shelve.open('bot_db')
     try:
-        bot.polling()
+        bot.polling(none_stop=True)
     except KeyboardInterrupt:
         print('Keyboard interruption occurred.')
     finally:
