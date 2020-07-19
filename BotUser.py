@@ -14,8 +14,7 @@ class BotUser:
         return fr'.\{self.id}\{self._audio_name(id)}'
 
     def get_audio(self, id):
-        with open(self._audio_path(id), 'rb') as f:
-            return f.read()
+        return open(self._audio_path(id), 'rb')
 
     def add_voice(self, voice):
         save_voice_to_wav(self._audio_path(self.record_id), voice)
