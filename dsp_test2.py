@@ -22,7 +22,7 @@ def start(update: Update, context: CallbackContext):
 
 def process_voice(update: Update, context: CallbackContext):
     if user := db.get(str(update.message.from_user.id)):
-        voice = update.message.voice.get_file.download()
+        voice = update.message.voice.get_file().download()
         user.add_voice(voice)
         db.update({user.id: user})
         context.bot.send_message(update.message.chat.id, reply_to_message_id=update.message.message_id,
