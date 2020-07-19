@@ -1,1 +1,1 @@
-web: python dsp_test2.py
+web: python main.py
