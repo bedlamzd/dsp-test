@@ -29,4 +29,4 @@ def read_img_from_bytearray(bytestr):
 def save_img(path, img):
     path = pathlib.Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    cv2.imwrite(path, img)
+    cv2.imwrite(str(path), img)
