@@ -4,13 +4,10 @@ import numpy as np
 from cv2.data import haarcascades
 
 face_cascade_name = f'{haarcascades}/haarcascade_frontalface_alt.xml'
-eyes_cascade_name = f'{haarcascades}/haarcascade_eye_tree_eyeglasses.xml'
 
 face_cascade = cv2.CascadeClassifier()
-eyes_cascade = cv2.CascadeClassifier()
 
 face_cascade.load(cv2.samples.findFile(face_cascade_name))
-eyes_cascade.load(cv2.samples.findFile(eyes_cascade_name))
 
 
 def contains_face(img):
