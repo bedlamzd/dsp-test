@@ -43,6 +43,7 @@ def process_voice(update: Update, context: CallbackContext):
 def process_img(update: Update, context: CallbackContext):
     if user := db.get(str(update.message.from_user.id)):
         imgs = update.message.photo
+        print(imgs)
         for img in imgs:
             context.bot.send_message(update.message.chat.id, text=f'Processing {img.file_id} img...')
             img = read_img_from_bytearray(img.get_file().download_as_bytearray())
