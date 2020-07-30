@@ -43,16 +43,12 @@ class BotUser:
     def get_audio(self, audio_id):
         """
         Get audio file by id
-        :param audio_id:
-        :return:
         """
         return open(self._audio_path(audio_id), 'rb')
 
     def add_voice(self, voice):
         """
         Save audio file
-        :param voice:
-        :return:
         """
         save_voice_to_wav(self._audio_path(self.record_id), voice)
         self.records.append(self._audio_name(self.record_id))
@@ -61,8 +57,6 @@ class BotUser:
     def add_image(self, img):
         """
         Save image
-        :param img:
-        :return:
         """
         save_img(self._image_path(self.img_id), img)
         self.imgs.append(self._img_name(self.img_id))
