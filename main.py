@@ -73,6 +73,16 @@ def process_img(update: Update, context: CallbackContext):
         context.bot.send_message(update.message.chat.id, 'Unknown user. Send /start first.')
 
 
+def error_handler(update: Update, context: CallbackContext):
+    """
+    Closes database properly before crash
+    """
+    try:
+        raise context.error
+    finally:
+        close_database()
+
+
 if __name__ == '__main__':
     TOKEN = os.getenv('TOKEN')
     URL = os.environ.get('URL')
@@ -90,6 +100,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(help_handler)
     dispatcher.add_handler(voice_handler)
     dispatcher.add_handler(photo_handler)
+    dispatcher.add_error_handler(error_handler)
 
     set_database(shelve.open('bot_db'))
     updater.start_webhook(
