@@ -14,8 +14,24 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 dotenv.load_dotenv()
 
+__database = None  # type: shelve.DbfilenameShelf
+
+
+def get_database() -> shelve.DbfilenameShelf:
+    assert __database is not None
+    return __database
+
+
+def set_database(db: shelve.DbfilenameShelf):
+    __database = db
+
+
+def close_database():
+    __database.close()
+
 
 def start(update: Update, context: CallbackContext):
+    db = get_database()
     context.bot.send_message(update.message.chat.id, text='This is test task for dsp Junior Developer')
     if (user_id := str(update.message.from_user.id)) not in db:
         db.update({user_id: BotUser(user_id)})
@@ -29,6 +45,7 @@ def help(update: Update, context: CallbackContext):
 
 
 def process_voice(update: Update, context: CallbackContext):
+    db = get_database()
     if user := db.get(str(update.message.from_user.id)):
         voice = update.message.voice.get_file().download_as_bytearray()
         user.add_voice(voice)
@@ -41,6 +58,7 @@ def process_voice(update: Update, context: CallbackContext):
 
 
 def process_img(update: Update, context: CallbackContext):
+    db = get_database()
     if user := db.get(str(update.message.from_user.id)):
         img = sorted(update.message.photo, key=lambda img: img.file_size, reverse=True)[0]
         context.bot.send_message(update.message.chat.id, text=f'Processing {img.file_id} img...')
@@ -73,7 +91,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(voice_handler)
     dispatcher.add_handler(photo_handler)
 
-    db = shelve.open('bot_db')
+    set_database(shelve.open('bot_db'))
     updater.start_webhook(
         listen='0.0.0.0',
         port=PORT,
