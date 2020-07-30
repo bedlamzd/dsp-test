@@ -9,6 +9,22 @@ from BotUser import BotUser
 
 dotenv.load_dotenv()
 
+__database = None  # type: shelve.DbfilenameShelf
+
+
+def get_database() -> shelve.DbfilenameShelf:
+    assert __database is not None
+    return __database
+
+
+def set_database(db: shelve.DbfilenameShelf):
+    __database = db
+
+
+def close_database():
+    __database.close()
+
+
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
@@ -29,18 +45,20 @@ def download_file(file_id):
 @bot.message_handler(commands=['start'])
 def welcome(message: telebot.types.Message):
     bot.send_message(message.chat.id, 'This is test task for dsp Junior Developer')
+    db = get_database()
     if (user_id := str(message.from_user.id)) not in db:
         db.update({user_id: BotUser(user_id)})
 
 
 @bot.message_handler(commands='users')
 def get_known_users(message: telebot.types.Message):
-    text = '\n'.join(user_id for user_id in db)
+    text = '\n'.join(user_id for user_id in get_database())
     bot.send_message(message.chat.id, text)
 
 
 @bot.message_handler(content_types=['voice'])
 def process_voice(message: telebot.types.Message):
+    db = get_database()
     if user := db.get(str(message.from_user.id)):
         voice = download_file(message.voice.file_id).content
         user.add_voice(voice)
@@ -51,10 +69,10 @@ def process_voice(message: telebot.types.Message):
 
 
 if __name__ == '__main__':
-    db = shelve.open('bot_db')
+    set_database(shelve.open('bot_db'))
     try:
         bot.infinity_polling(none_stop=True)
     except KeyboardInterrupt:
         print('Keyboard interruption occurred.')
     finally:
-        db.close()
+        close_database()
